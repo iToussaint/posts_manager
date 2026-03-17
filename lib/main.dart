@@ -32,7 +32,6 @@ class PostListScreen extends StatefulWidget {
 class _PostListScreenState extends State<PostListScreen> {
   final String apiUrl = "https://jsonplaceholder.typicode.com/posts";
 
-  // READ 
   Future<List<Post>> fetchPosts() async {
     try {
       final response = await http.get(Uri.parse(apiUrl));
@@ -42,15 +41,14 @@ class _PostListScreenState extends State<PostListScreen> {
       }
       throw Exception("Failed to load posts");
     } catch (e) {
-      throw Exception("Network Error: Check your connection"); // 
+      throw Exception("Network Error: Check your connection");
     }
   }
 
-  // DELETE 
   Future<void> deletePost(int id) async {
     final response = await http.delete(Uri.parse('$apiUrl/$id'));
     if (response.statusCode == 200) {
-      setState(() {}); // Refresh UI
+      setState(() {});
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Post deleted successfully"), behavior: SnackBarBehavior.floating),
       );
@@ -65,7 +63,6 @@ class _PostListScreenState extends State<PostListScreen> {
         centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       ),
-      // FutureBuilder handles the UI based on the Future state [cite: 18]
       body: FutureBuilder<List<Post>>(
         future: fetchPosts(),
         builder: (context, snapshot) {
@@ -95,7 +92,7 @@ class _PostListScreenState extends State<PostListScreen> {
                       icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
                       onPressed: () => _confirmDelete(post.id!),
                     ),
-                    onTap: () => _showPostDialog(post: post), // View Details/Edit [cite: 10, 12]
+                    onTap: () => _showPostDialog(post: post),
                   ),
                 );
               },
@@ -104,7 +101,7 @@ class _PostListScreenState extends State<PostListScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _showPostDialog(), // Create [cite: 11]
+        onPressed: () => _showPostDialog(),
         label: const Text("New Post"),
         icon: const Icon(Icons.add),
       ),
@@ -160,7 +157,6 @@ class _PostListScreenState extends State<PostListScreen> {
                 onPressed: () async {
                   if (titleController.text.isEmpty) return;
                   Navigator.pop(context);
-                  // Implementation for POST/PUT 
                 },
                 child: const Text("Save Post"),
               ),
